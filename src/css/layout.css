@@ -192,7 +192,12 @@ textarea._changed {
 	max-height: auto;
 	height: auto;
 	display: block;
-	overflow: hidden;
+	overflow: hidden;	
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
 }
 .fold._folded {
 	max-height: 28px
@@ -215,26 +220,37 @@ textarea._changed {
 	opacity: 1;
 }
 
+.fold i,
+.fold b,
+.fold span {
+	-webkit-touch-callout:auto;
+	-webkit-user-select:auto;
+	-moz-user-select:auto;
+	-ms-user-select:auto;
+	user-select:auto;
+}
 
 .toggler {
 	position: absolute;
-	top: 10px;
+	top: 8px;
 	left: 10px;
-	width: 10px;
-	height: 10px;
+	width: 12px;
+	height: 12px;
 	background-color: green;
 	opacity: 0.35;
 	transition: 0.25s ease;
-	-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none
 }
 .toggler::before {
 	content: '···';
 	position: absolute;
 	left: 16px;
-	top: -4px;
+	top: -3px;
 	transition: 0.25s ease;
 	opacity: 0;
 	visibility: hidden;
+}
+.toggler:active {
+	transform: scale(0.8);
 }
 .toggler._active {
 	opacity: 0.5;
