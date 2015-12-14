@@ -125,6 +125,11 @@ body {
 	overflow-y: scroll;
 }
 
+small {
+	font-size: 12px;
+	color: #999;
+}
+
 .main {
 	width: 90%;
 	max-width: 920px;
@@ -133,18 +138,19 @@ body {
 	text-align: center;
 }
 
-textarea {
+.inp {
 	width: 100%;
-	height: 250px;
-	transition: 0.25s ease;
+	height: 280px;
+	text-align: left;
 }
-
+/*
+	transition: 0.25s ease;
 textarea._changed {
 	opacity: 0.7;
 	color: #333;
 	border-color: #777;
 	background-color: #F9F9F9;
-}
+}*/
 
 .container {
 	margin: 20px 0;
@@ -154,6 +160,7 @@ textarea._changed {
 .col {
 	padding: 10px;
 	font-size: 16px;
+	text-align: left;
 }
 
 .container > .col {
@@ -174,6 +181,11 @@ textarea._changed {
 	color: #5A1010;
 	white-space: normal;
 	animation: notice 0.25s ease 1;
+}
+
+#resultArea .ace_marker-layer,
+#resultArea .ace_gutter-active-line {
+	opacity: 0;
 }
 
 .controls {

@@ -1,7 +1,6 @@
 (function (global, $) {
   'use strict';
 
-
   // :: MODULES
   var parser = global.SparkParser;
   var evaluator = global.SparkEvaluator;
@@ -47,6 +46,48 @@
     evt.stopPropagation();
     parseSource();
   });
+  // load examples
+  $('.examples-item').click(function (evt) {
+    evt.preventDefault();
+    var $this = $(this);
+    var exId = $this.data('example');
+    var $exEl = $('#src_' + exId);
+    var exText = $exEl.text().trim();
+
+    exText = exText.replace(/^\t+/gm, '');
+
+    editorSpark.setValue(exText);
+    editorSpark.selection.moveTo(Infinity)
+
+  });
+
+  // :: EDITORS
+  var editorSpark = window._e =  ace.edit("inputArea");
+  var sessionSpark = window._s =editorSpark.getSession();
+  editorSpark.focus();
+  sessionSpark.setMode("ace/mode/c_cpp");
+  sessionSpark.setUseWrapMode(true);
+  editorSpark.$blockScrolling = Infinity // disable console message
+  editorSpark.setShowPrintMargin(false);
+  editorSpark.setBehavioursEnabled(true);
+  editorSpark.renderer.setPadding(2);
+  editorSpark.setOptions({
+    vScrollBarAlwaysVisible: false,
+    fontSize: 17
+  });
+
+  var editorCpp = ace.edit("resultArea");
+  var sessionCpp = editorCpp.getSession();
+  sessionCpp.setMode("ace/mode/c_cpp");
+  sessionCpp.setUseWrapMode(true);
+  editorCpp.$blockScrolling = Infinity // disable console message
+  editorCpp.setShowPrintMargin(false);
+  editorCpp.setBehavioursEnabled(true);
+  editorCpp.renderer.setPadding(2);
+  editorCpp.setOptions({
+    vScrollBarAlwaysVisible: false,
+    fontSize: 17
+  });
 
   // :: LOG ERROR
   var logError = function (error) {
@@ -89,18 +130,25 @@
 
   // :: PARSE SOURCE
   var parseSource = function () {
-    var text = $inputArea.val();
+    var text = editorSpark.getValue();
     $output.removeClass('_error');
     $resultArea.removeClass('_changed');
     try {
       var tree_1 = parser.parse(text);
+      console.log('TREE 1:');
+      console.log(global._t1 = tree_1);
       var tree_2 = evaluator.parse(tree_1).tree;
+      console.log('TREE 2:');
+      console.log(global._t2 = tree_2);
       var tree_3 = generator.parse(tree_2);
+      console.log('CODE:');
+      console.log(tree_3);
 
       var result = prettyJSON(tree_2);
 
       $output.html(result);
-      $resultArea.val(tree_3);
+
+      editorCpp.setValue(tree_3);
 
       $('.fold').append('<div class="toggler"></div>');
       $('.toggler').click(function (evt) {
@@ -116,12 +164,6 @@
       $('#output >  .fold > .toggler').remove();
       $('#output >  .fold > .fold > .toggler').click();
 
-      console.log('TREE 1:');
-      console.log(global._t1 = tree_1);
-      console.log('TREE 2:');
-      console.log(global._t2 = tree_2);
-      console.log('CODE:');
-      console.log(tree_3);
     }
     catch (e) {
       logError(e);

@@ -20,11 +20,11 @@
 					<a href="#ex2" class="examples-item" data-example="variables">Variables</a>
 					<a href="#ex3" class="examples-item" data-example="if-statements">If statements</a>
 					<a href="#ex4" class="examples-item" data-example="for-loops">For loops</a>
-					<a href="#ex5" class="examples-item" data-example="funcions">Funcions</a>
+					<a href="#ex5" class="examples-item" data-example="functions">Functions</a>
 					<a href="#ex6" class="examples-item" data-example="find-errors">Find errors</a>
 					<a href="#ex7" class="examples-item" data-example="leds">LEDs</a>
 				</div>
-				<div class="__right">
+				<div class="__right __txt-right">
 					<button id="btnEval">Eval</button>
 				</div>
 			</div>
@@ -32,14 +32,15 @@
 			<div class="container">
 				<div class="col" id="input">
 					<h3>Input</h3>
-					<textarea id="inputArea"></textarea>
+					<div class="inp" id="inputArea"></div>
 				</div>
 
 				<div class="col" id="result">
 					<h3>Output</h3>
-					<textarea id="resultArea"></textarea>
+					<div class="inp" id="resultArea"></div>
 				</div>
 			</div>
+			<small>[Ctrl + Enter]</small>
 			
 			
 			<pre id="output">
@@ -47,8 +48,80 @@
 			</pre>
 		</div>
 
+		<script type="spark/example" id="src_hello-world">
+			foo = "Hello, world!"
+			print(foo)
+		</script>
+
+		<script type="spark/example" id="src_variables">
+			a = 1
+			b = -5
+			c = 70000
+			hey = true
+			foo = 'Hello!'
+		</script>
+
+		<script type="spark/example" id="src_if-statements">
+			a = 1
+
+			if a < 42 {
+			  print( 'Hello!' )
+			}
+			else if a > 0 {
+			  print( 'World' )
+			}
+			else {
+			  print( 'Foo!' )
+			}
+		</script>
+
+		<script type="spark/example" id="src_for-loops">
+			b = 1000
+			
+			for i = 0 ; i < 10 ; i ++ {
+			  b += 100
+			}
+
+			for b > 500 {
+			  b -= 250
+			}
+		</script>
+
+		<script type="spark/example" id="src_functions">
+			int test( int number ) {
+			  print( number * 5 )
+			}
+
+		</script>
+
+		<script type="spark/example" id="src_find-errors">
+			for (a < 10 {
+			  a++
+			}
+
+			if a < 10 { 
+			  print( "Hello!" )
+			}
+			else if ( a > 0 {
+			  print( foo )
+			}
+
+			int printSum(int x, int x) {
+				return true
+			}
+		</script>
+
+		<script type="spark/example" id="src_leds">
+			ledPin = 13
+
+			pinMode(ledPin, OUTPUT)
+			pinWrite(ledPin, HIGH)
+		</script>
+
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/mode-c_cpp.js"></script>
 		<script src="js/parser/parser.js"></script>
 		<script src="js/parser/evaluator.js"></script>
 		<script src="js/parser/generator.js"></script>
