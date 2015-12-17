@@ -1,6 +1,9 @@
 (function (global, $) {
   'use strict';
 
+  // WARNING!
+  // the code below is not very nice (aka prototype)
+
   // :: MODULES
   var parser = global.SparkParser;
   var evaluator = global.SparkEvaluator;
@@ -54,11 +57,20 @@
     var $exEl = $('#src_' + exId);
     var exText = $exEl.text().trim();
 
-    exText = exText.replace(/^\t+/gm, '');
+    exText = exText.replace(/^\t+/gm, '') + '\n';
 
     editorSpark.setValue(exText);
-    editorSpark.selection.moveTo(Infinity)
+    editorSpark.selection.moveTo(Infinity);
+    editorSpark.focus();
 
+    global.location.hash = $this.attr('href');
+
+  });
+  // global onLoad
+  $(global).load(function () {
+    if (global.location.hash.length > 1) {
+      $('.examples-item[href^="'+global.location.hash+'"]').click();
+    }
   });
 
   // :: EDITORS
@@ -67,6 +79,7 @@
   editorSpark.focus();
   sessionSpark.setMode("ace/mode/c_cpp");
   sessionSpark.setUseWrapMode(true);
+  sessionSpark.setTabSize(2);
   editorSpark.$blockScrolling = Infinity // disable console message
   editorSpark.setShowPrintMargin(false);
   editorSpark.setBehavioursEnabled(true);
@@ -75,11 +88,15 @@
     vScrollBarAlwaysVisible: false,
     fontSize: 17
   });
+  editorSpark.on('change', function () {
+    $resultArea.addClass('_changed');
+  });
 
   var editorCpp = ace.edit("resultArea");
   var sessionCpp = editorCpp.getSession();
   sessionCpp.setMode("ace/mode/c_cpp");
   sessionCpp.setUseWrapMode(true);
+  sessionCpp.setTabSize(2);
   editorCpp.$blockScrolling = Infinity // disable console message
   editorCpp.setShowPrintMargin(false);
   editorCpp.setBehavioursEnabled(true);
@@ -107,6 +124,8 @@
       result = 'Semantic error on '+ link +': '+ error.message;
     }
     $output.addClass('_error').html(result);
+    editorSpark.focus();
+    editorSpark.gotoLine(loc.line, loc.column - 1, true);
   };
 
   // :: PRETTY JSON OUTPUT
@@ -123,8 +142,8 @@
                     .replace(/([A-Z_]+)/g, '<b>$1</b>')
                     // stylize props
                     .replace(/"([^"]+)"\:/g, '<i style="color: #555;">$1</i>: ')
-                    .replace(/\:[ ]+"([^"]+)"/g, '  <span style="color: #37547D;">$1</span>')
-                    .replace(/\:[ ]+(\d+)/g, '  <span style="color: #37547D;">$1</span>');
+                    .replace(/\:[ ]+"([^"]+)"/g, '  <span class="_color-1">$1</span>')
+                    .replace(/\:[ ]+(\d+)/g, '  <span class="_color-1">$1</span>');
     return result;
   }
 
@@ -137,9 +156,12 @@
       var tree_1 = parser.parse(text);
       console.log('TREE 1:');
       console.log(global._t1 = tree_1);
-      var tree_2 = evaluator.parse(tree_1).tree;
+      var _t = evaluator.parse(tree_1);
+      global._t = _t;
+      var tree_2 = _t.tree;
       console.log('TREE 2:');
-      console.log(global._t2 = tree_2);
+      console.log(_t)
+      global._t2 = tree_2;
       var tree_3 = generator.parse(tree_2);
       console.log('CODE:');
       console.log(tree_3);
@@ -148,7 +170,9 @@
 
       $output.html(result);
 
-      editorCpp.setValue(tree_3);
+      editorCpp.setValue(tree_3 + '\n');
+
+      editorCpp.selection.moveTo(Infinity);
 
       $('.fold').append('<div class="toggler"></div>');
       $('.toggler').click(function (evt) {
@@ -162,7 +186,7 @@
       });
 
       $('#output >  .fold > .toggler').remove();
-      $('#output >  .fold > .fold > .toggler').click();
+      $('#output >  .fold > .fold > .fold > .toggler').click();
 
     }
     catch (e) {

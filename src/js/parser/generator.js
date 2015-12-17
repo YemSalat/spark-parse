@@ -1,2 +1,420 @@
-!function r(n,e,t){function i(u,a){if(!e[u]){if(!n[u]){var f="function"==typeof require&&require;if(!a&&f)return f(u,!0);if(o)return o(u,!0);var c=new Error("Cannot find module '"+u+"'");throw c.code="MODULE_NOT_FOUND",c}var s=e[u]={exports:{}};n[u][0].call(s.exports,function(r){var e=n[u][1][r];return i(e?e:r)},s,s.exports,r,n,e,t)}return e[u].exports}for(var o="function"==typeof require&&require,u=0;u<t.length;u++)i(t[u]);return i}({1:[function(r,n,e){n.exports=function(){"use strict";var r={millis:"millis",pinRead:"digitalRead",pinWrite:"digitalWrite",pinMode:"pinMode",print:"Serial.print",printn:"Serial.println"};return r}()},{}],2:[function(r,n,e){(function(e){n.exports=function(){"use strict";var n=r("./modules/UseWatcher"),t=r("./modules/IndentManager"),i=r("./modules/GeneratorUtil"),o=r("./../common/DEFAULT_FUNCTIONS"),u=function(r,n){if(null===r)return"";var e=n||r.$$,t=s[e](r);if(t.error)throw new CompilerError("SemanticError",t.error.message,t.error.location);return t},a=function(r){var e="";return(n.isUsed("print")||n.isUsed("println"))&&(e="Serial.begin( 9600 );\n\n"),e+=r},f=function(r){var n=r.trim().replace(/(?!^)[ ]+/gim," ");return n},c={parse:function(r){var e;return n.reset(),e=u(r),e=a(e),e=f(e)}},s={DOCSTRING:function(r){return"// "+r.body.join("\n// ")+"\n"},VARIABLE_STATEMENT:function(r){for(var n=i.generateType(r.type)+" ",e=[],t=0,o=r.declarations.length;o>t;t++){var a=r.declarations[t],f="",c="";"str"===a.type&&(c="[]"),f+=u(a.id)+c,a.init&&(f+=" = "+u(a.init)),e.push(f)}return n+=e.join(", ")},VARIABLE_DECLARATOR:function(r){return r},FUNCTION_DECLARATION:function(r){var n="";r.doc&&(n+=u(r.doc)),n+=r.type+" "+r.id.name+" ( ";for(var e=[],t=0,i=r.params.length;i>t;t++){var o=u(r.params[t]);e.push(o)}return n+=e.join(", "),n+=" ) ",n+=u(r.body)},PARAM_DECLARATOR:function(r){var n=i.generateVarDeclaration(r);return n},RETURN_STATEMENT:function(r){var n="return "+u(r.argument);return n},CALL_STATEMENT:function(r){var e=r.callee.name,t=e;o.hasOwnProperty(e)&&(t=o[e],n.add(e)),t+="( ";for(var i=[],a=0,f=r.arguments.length;f>a;a++){var c=r.arguments[a];i.push(u(c))}return t+=i.join(", "),t+=" )"},FOR_STATEMENT:function(r){var n="for (";return n+=u(r.init)+" ; ",n+=u(r.test)+" ; ",n+=u(r.update)+" )",n+=u(r.body)},BREAK_STATEMENT:function(r){return r},CONTINUE_STATEMENT:function(r){return r},EXPRESSION_STATEMENT:function(r){var n=u(r.expression);return n},IDENTIFIER:function(r){return r.name},LITERAL:function(r){var n=r.value;return"str"===r.type&&(n='"'+n+'"'),n},BINARY_EXPRESSION:function(r){var n="";return n+=u(r.left),n+=" "+r.operator+" ",n+=u(r.right)},ASSIGNMENT_STATEMENT:function(r){var n=u(r.left);return n+=" = "+u(r.right)},ASSIGNMENT_ACTION:function(r){var n=u(r.left);return n+=" "+r.operator+" "+u(r.right)},BLOCK_STATEMENT:function(r){var n=" {\n";return t.increase(),r.body.forEach(function(r){n+=t.getCurrentIndent()+u(r)+";\n"}),t.decrease(),n+="}\n"},PROGRAM:function(r){var n="";return r.body.forEach(function(r){n+=t.getCurrentIndent()+u(r),n.match(/\}[\s]*$/)||(n+=";"),n+="\n"}),n},IF_STATEMENT:function(r){var n="if ( ";return n+=u(r.test),n+=" )",n+=u(r.consequent),r.alternate&&(n+="else ",n+=u(r.alternate)),n},LOGICAL_EXPRESSION:function(r){var n=u(r.left)+" "+r.operator+" "+u(r.right);return n},UPDATE_EXPRESSION:function(r){var n="";return n+=r.prefix?r.operator+u(r.argument):u(r.argument)+r.operator},UNARY_EXPRESSION:function(r){var n=r.operator+"";return n+=u(r.argument)}};return e.SparkGenerator=c,c}()}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./../common/DEFAULT_FUNCTIONS":1,"./modules/GeneratorUtil":3,"./modules/IndentManager":4,"./modules/UseWatcher":5}],3:[function(r,n,e){n.exports=function(){"use strict";var r={"byte":"char",ubyte:"unsigned char","int":"int",uint:"unsigned int","long":"long",ulong:"unsigned long","float":"float",str:"char","void":"void"},n={str:{isArray:!0,isString:!0}},e={generateType:function(n){return r[n]||n},generateVarDeclaration:function(r){var t=e.generateType(r.type),i=r.id.name;if(n.hasOwnProperty(r.type)){var o=n[r.type];if(o.isArray)return t+" "+i+"[]"}return t+" "+i}};return e}()},{}],4:[function(r,n,e){n.exports=function(){"use strict";var r=0,n="  ",e="",t={getCurrentIndent:function(){return e},increase:function(){r+=1,e=Array(r+1).join(n)},decrease:function(){r-=1,e=Array(r+1).join(n)}};return t}()},{}],5:[function(r,n,e){n.exports=function(){var r=[],n={add:function(n){return-1===r.indexOf(n)?(r.push(n),n):!1},isUsed:function(n){return r.indexOf(n)>-1},getUses:function(){return r},reset:function(){r=[]}};return n}()},{}]},{},[2]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = (function () {
+  // :: CONSTANTS
+  'use strict';
+  
+  var DEFAULT_FUNCTIONS = {
+    millis: 'millis',
+    pinRead: 'digitalRead',
+    pinWrite: 'digitalWrite',
+    pinMode: 'pinMode',
+    print: 'Serial.print',
+    printn: 'Serial.println'
+  };
+
+  return DEFAULT_FUNCTIONS;
+
+})();
+},{}],2:[function(require,module,exports){
+(function (global){
+module.exports = (function() {
+  'use strict';
+
+  // :: MODULES
+  var useWatcher = require('./modules/UseWatcher');
+  var indentManager = require('./modules/IndentManager');
+  var util = require('./modules/GeneratorUtil');
+
+  // :: CONSTANTS
+  var DEFAULT_FUNCTIONS = require('./../common/DEFAULT_FUNCTIONS');
+
+  // :: OP
+  var __generateNode = function (node, method) {
+    if (node === null) {
+      return '';
+    }
+    var mType = method || node['$$'];
+    var pNode = evaluate[mType](node)
+    if (pNode.error) {
+      throw new CompilerError('SemanticError', pNode.error.message, pNode.error.location);
+    }
+    return pNode;
+  };
+
+  var __preProcess = function (code) {
+    var result = '';
+    // @TODO: Refactor
+    if (useWatcher.isUsed('print') || useWatcher.isUsed('println')) {
+      result = 'Serial.begin( 9600 );\n\n';
+    }
+
+    result = result + code;
+
+    return result;
+  };
+
+  var __postProcess = function (code) {
+    var result = code.trim().replace(/([a-z0-9])[ ]+/gi, '$1 ');
+    return result;
+  };
+
+  // :: VARS
+
+  // :: API
+  var api = {
+    parse: function (tree) {
+      var code;
+
+      // reset uses watcher
+      useWatcher.reset();
+      
+      code = __generateNode(tree);
+      code = __preProcess(code);
+      code = __postProcess(code);
+
+      return code;
+    }
+  };
+
+  // :: GENERATE
+  var evaluate = {
+
+    DOCSTRING: function(node) {
+      return '// ' + node.body.join('\n// ') + '\n';
+    },
+    
+    VARIABLE_STATEMENT: function(node) {
+      var result = util.generateType(node.type) + ' ';
+
+      var decs = [];
+      for (var i=0,l=node.declarations.length; i<l; i++) {
+        var item = node.declarations[i];
+        var curDec = '';
+        
+        var varPostfix = '';
+        if (item.type === 'str') {
+          varPostfix = '[]';
+        }
+        curDec += __generateNode(item.id) + varPostfix;
+
+        if (item.init) {
+
+          curDec += ' = ' + __generateNode(item.init);
+        }
+
+        decs.push( curDec );
+      }
+
+      result += decs.join(', ');
+
+      return result;
+    },
+
+    VARIABLE_DECLARATOR: function (node) {
+      return node;
+    },
+
+
+    FUNCTION_DECLARATION: function (node) {
+      var result = ''
+      if (node.doc) {
+        result += __generateNode(node.doc);
+      }
+
+      result += node.type + ' ' + node.id.name + ' ( ';
+
+      var fnParams = [];
+      for (var i=0, l=node.params.length; i<l; i++) {
+        var prm = __generateNode(node.params[i]);
+        fnParams.push(prm);
+      }
+
+      result += fnParams.join(', ');
+
+      result += ' ) '
+
+      // parse function body
+      result += __generateNode(node.body);
+      
+      return result;
+    },
+    PARAM_DECLARATOR: function (node) {
+
+      var result = util.generateVarDeclaration(node);
+      return result;
+    },
+    RETURN_STATEMENT: function (node) {
+      var result = 'return ' + __generateNode(node.argument);
+      return result;
+    },
+    CALL_STATEMENT: function (node) {
+      var fName = node.callee.name;
+      var result = fName;
+      if (DEFAULT_FUNCTIONS.hasOwnProperty(fName)) {
+        result = DEFAULT_FUNCTIONS[fName];
+        useWatcher.add(fName);
+      }
+
+      result += '( ';
+      var args = [];
+      for (var i=0, l=node['arguments'].length; i<l; i++) {
+        var curArg = node['arguments'][i];
+        args.push(__generateNode(curArg));
+      }
+      result += args.join(', ');
+
+      result += ' )';
+
+      return result;
+    },
+
+
+    FOR_STATEMENT: function (node) {
+      var result = 'for (';
+      result += __generateNode(node.init) + ' ; ';
+      result += __generateNode(node.test) + ' ; ';
+      result += __generateNode(node.update) + ' )';
+      result += __generateNode(node.body);
+      return result;
+    },
+
+    BREAK_STATEMENT: function (node) {
+      return node;
+    },
+    CONTINUE_STATEMENT: function (node) {
+      return node;
+    },
+
+
+    EXPRESSION_STATEMENT: function (node) {
+      var result = __generateNode(node.expression);
+      return result;
+    },
+
+    IDENTIFIER: function (node) {
+      return node.name;
+    },
+
+    LITERAL: function(node) {
+      var result = node.value;
+      if (node.type === 'str') {
+        result = '"' + result + '"';
+      }
+      return result;
+    },
+
+    BINARY_EXPRESSION: function (node) {
+      var result = '';
+      // eval left and right parts first
+      result += __generateNode(node.left);
+      result += ' ' + node.operator + ' ';
+      result += __generateNode(node.right);
+      return result;
+    },
+
+    ASSIGNMENT_STATEMENT: function (node) {
+      var result = __generateNode(node.left);
+      // eval asignment right hand side
+      result += ' = ' + __generateNode(node.right);
+      return result;
+    },
+
+    ASSIGNMENT_ACTION: function (node) {
+      var result = __generateNode(node.left);
+      // eval asignment right hand side
+      result += ' '+ node.operator +' ' + __generateNode(node.right);
+      return result;
+    },
+
+    BLOCK_STATEMENT: function (node) {
+      var result = ' {\n';
+
+      indentManager.increase();
+
+      node.body.forEach(function(item) {
+        result += indentManager.getCurrentIndent() + __generateNode(item);
+        if (!result.match(/\}\s*$/g)) {
+          result += ';\n';
+        }
+        if (!result.match(/\n\s*$/g)) {
+          result += '\n';
+        }
+      });
+
+      indentManager.decrease();
+      
+      result += indentManager.getCurrentIndent() + '}\n';
+
+      return result;
+    },
+
+    PROGRAM: function (node) {
+      var result = '';
+      node.body.forEach(function(item) {
+        result += indentManager.getCurrentIndent() + __generateNode(item);
+        if (!result.match(/\}\s*$/g)) {
+          result += ';';
+        }
+        result += '\n';
+      });
+      
+      return result;
+    },
+
+    IF_STATEMENT: function (node) {
+
+      var result = 'if ( ';
+
+      result += __generateNode(node.test);
+
+      result += ' )';
+      
+      result += __generateNode(node.consequent);
+
+      if (node.alternate) {
+      result += indentManager.getCurrentIndent() + 'else ';
+        result += __generateNode(node.alternate);
+      }
+      return result;
+    },
+
+    LOGICAL_EXPRESSION: function (node) {
+      var result = __generateNode(node.left) + ' ' + node.operator + ' ' + __generateNode(node.right);
+      return result;
+    },
+
+    UPDATE_EXPRESSION: function (node) {
+      var result = '';
+      if (node.prefix) {
+        result += node.operator + __generateNode(node.argument);
+      }
+      else {
+        result += __generateNode(node.argument) + node.operator;
+      }
+      return result;
+    },
+
+    UNARY_EXPRESSION: function (node) {
+      var result = node.operator + '';
+      result += __generateNode(node.argument);
+      return result;
+    }
+
+  };
+
+  // :: SPARK GENERATOR
+  global.SparkGenerator = api;
+  return api;
+
+})();
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"./../common/DEFAULT_FUNCTIONS":1,"./modules/GeneratorUtil":3,"./modules/IndentManager":4,"./modules/UseWatcher":5}],3:[function(require,module,exports){
+module.exports = (function () {
+  // :: UTIL
+  'use strict';
+
+  var typeMap = {
+    'byte'  : 'char',
+    'ubyte' : 'unsigned char',
+    'int'   : 'int',
+    'uint'  : 'unsigned int',
+    'long'  : 'long',
+    'ulong' : 'unsigned long',
+    'float' : 'float',
+    'str'   : 'char',
+    'void'  : 'void',
+  };
+
+  var typeDescriptors = {
+    'str' : {
+      isArray: true,
+      isString: true
+    }
+  }
+
+  var api = {
+    generateType: function (type) {
+      return typeMap[type] || type;
+    },
+
+    generateVarDeclaration: function (node) {
+      var type = api.generateType(node.type);
+      var name = node.id.name;
+      if (typeDescriptors.hasOwnProperty(node.type)) {
+        var td = typeDescriptors[node.type];
+        if (td.isArray) {
+          return type + ' ' + name + '[]';
+        }
+      }
+      return type + ' ' + name;
+    } 
+  };
+
+  // :: EXPORT
+  return api;
+
+})();
+},{}],4:[function(require,module,exports){
+module.exports = (function () {
+  // :: INDENT MANAGER
+  'use strict';
+
+  var indentLevel = 0;
+  var indentChar = '  ';
+  var currentIndent = '';
+
+  var api = {
+    getCurrentIndent: function () {
+      return currentIndent;
+    },
+    increase: function () {
+      indentLevel += 1;
+      currentIndent = Array(indentLevel + 1).join(indentChar);
+      console.log('currentIndent');
+      console.log(currentIndent.length);
+    },
+    decrease: function () {
+      indentLevel -= 1;
+      currentIndent = Array(indentLevel + 1).join(indentChar);
+    }
+  }
+
+  // :: EXPORT
+  return api;
+
+})();
+},{}],5:[function(require,module,exports){
+module.exports = (function () {
+  var uses = [];
+
+  var api = {
+    add: function (func) {
+      if (uses.indexOf(func) === -1) {
+        uses.push(func);
+        return func;
+      }
+      return false;
+    },
+
+    isUsed: function (func) {
+      return uses.indexOf(func) > -1;
+    },
+
+    getUses: function () {
+      return uses;
+    },
+
+    reset: function () {
+      uses = [];
+    }
+  }
+  
+  // :: EXPORT
+  return api;
+
+})();
+},{}]},{},[2])
+
+
 //# sourceMappingURL=maps/generator.js.map

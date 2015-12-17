@@ -16,16 +16,21 @@
 			<div class="controls __clearfix">
 				<div class="examples __left">
 					<span class="label">Examples: </span>
-					<a href="#ex1" class="examples-item" data-example="hello-world">Hello, world!</a>
-					<a href="#ex2" class="examples-item" data-example="variables">Variables</a>
-					<a href="#ex3" class="examples-item" data-example="if-statements">If statements</a>
-					<a href="#ex4" class="examples-item" data-example="for-loops">For loops</a>
-					<a href="#ex5" class="examples-item" data-example="functions">Functions</a>
-					<a href="#ex6" class="examples-item" data-example="find-errors">Find errors</a>
-					<a href="#ex7" class="examples-item" data-example="leds">LEDs</a>
+					<span class="_color-2">[</span>
+					<a href="#hello-world" class="examples-item" data-example="hello-world">Hello, world!</a>
+					<a href="#variables" class="examples-item" data-example="variables">Variables</a>
+					<a href="#if-statements" class="examples-item" data-example="if-statements">If statements</a>
+					<a href="#for-loops" class="examples-item" data-example="for-loops">For loops</a>
+					<a href="#functions" class="examples-item" data-example="functions">Functions</a>
+					<a href="#find-errors" class="examples-item" data-example="find-errors">Find errors</a>
+					<a href="#leds" class="examples-item" data-example="leds">LEDs</a>
+					<span class="_color-2">]</span>
 				</div>
 				<div class="__right __txt-right">
-					<button id="btnEval">Eval</button>
+					<span>
+						<button id="btnEval">Eval</button><br>
+						<small>Ctrl + Enter</small>
+					</span>
 				</div>
 			</div>
 
@@ -40,7 +45,6 @@
 					<div class="inp" id="resultArea"></div>
 				</div>
 			</div>
-			<small>[Ctrl + Enter]</small>
 			
 			
 			<pre id="output">
@@ -56,7 +60,7 @@
 		<script type="spark/example" id="src_variables">
 			a = 1
 			b = -5
-			c = 70000
+			c = 5m30s
 			hey = true
 			foo = 'Hello!'
 		</script>
@@ -88,10 +92,17 @@
 		</script>
 
 		<script type="spark/example" id="src_functions">
-			int test( int number ) {
-			  print( number * 5 )
+			int multiply (int a, int b) {
+			  return a * b
 			}
 
+			int multiply (int a) {
+			  return a * 2;
+			}
+
+			int multiply () {
+			  
+			}
 		</script>
 
 		<script type="spark/example" id="src_find-errors">
@@ -107,7 +118,7 @@
 			}
 
 			int printSum(int x, int x) {
-				return true
+				
 			}
 		</script>
 
